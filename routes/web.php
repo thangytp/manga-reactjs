@@ -31,9 +31,16 @@ Route::prefix('admin')->group(function () {
     Route::get('add-chapter', function () {
         return view('admin');
     });
+    Route::get('add-multi-chapter', function () {
+        return view('admin');
+    });
     Route::get('list-chapter', function () {
+        return view('admin');
+    });
+    Route::get('edit-chapter/{id}', function () {
         return view('admin');
     });
 });
 
 Route::resource('mangas', 'MangaController');
+Route::resource('chapters', 'ChapterController');
