@@ -17,4 +17,10 @@ class Manga extends Model
     {
     	return $this->belongsToMany('App\Author');
     }
+
+    public function chapters()
+    {
+    	return $this->hasMany('App\Chapter');
+    }
+
 }
