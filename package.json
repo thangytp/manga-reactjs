@@ -25,9 +25,11 @@
     "fetch": "^1.1.0",
     "jquery": "^3.2.1",
     "popper.js": "^1.12.5",
+    "query-string": "^5.0.1",
     "react-bootstrap": "^0.31.3",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
+    "react-select": "^1.1.0",
     "react-toastr": "^2.9.3"
   }
 }
