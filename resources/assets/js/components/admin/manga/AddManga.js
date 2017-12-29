@@ -10,6 +10,7 @@ var {ToastContainer} = ReactToastr;
 var ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 
 import Breadcrumb from '../_shared/Breadcrumb';
+import Helper from '../_shared/Helper';
 
 export default class AddManga extends Component {
 	constructor(props){
@@ -44,8 +45,10 @@ export default class AddManga extends Component {
   	}
 
 	handleChangeName(e){
+		let slug = Helper.changeToSlug(e.target.value.trim());
 		this.setState({
-			name: e.target.value
+			name: e.target.value.trim(),
+			slug: slug
 		});
 	}
 	handleChangeSlug(e){
@@ -113,7 +116,7 @@ export default class AddManga extends Component {
 								<div className="form-group row">
 									<label htmlFor="inputPassword3" className="col-sm-2 col-form-label">Slug</label>
 									<div className="col-sm-10">
-										<input type="text" className="form-control" id="inputPassword3" placeholder="/tay-du-chap-1" onChange={this.handleChangeSlug}/>
+										<input type="text" className="form-control" id="inputPassword3" placeholder="/tay-du" value={this.state.slug} onChange={this.handleChangeSlug}/>
 									</div>
 								</div>
 								<div className="form-group row">
@@ -125,11 +128,7 @@ export default class AddManga extends Component {
 								<div className="form-group row">
 									<label htmlFor="inputEmail3" className="col-sm-2 col-form-label">Status</label>
 									<div className="col-sm-10">
-										<select className="form-control" id="status" onChange={this.handleChangeStatus}>
-											<option value="new">New</option>
-											<option value="cam">Cam</option>
-											<option value="raw">Raw</option>
-										</select>
+										<input type="text" className="form-control" id="status" placeholder="New, Hot, Đang Tiến Hành" onChange={this.handleChangeStatus}/>
 									</div>
 								</div>
 								<div className="form-group row">
