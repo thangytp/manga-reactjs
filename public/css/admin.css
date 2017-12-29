@@ -265,13 +265,25 @@ header .navbar .manga-navbar-nav .dropdown-menu a {
   color: #1a1a1a;
 }
 
+/*---------------------- PADDING CSS --------------------*/
+
+.pR10 {
+  padding-right: 10px !important;
+}
+
+/*---------------------- END PADDING CSS --------------------*/
+
 /*---------------------- ADMIN CONTENT CSS --------------------*/
 
 #content {
-  padding: 20px;
+  padding: 0 20px;
   min-height: 100vh;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
+}
+
+.action a {
+  color: #17a2b8;
 }
 
 .manga-btn {
