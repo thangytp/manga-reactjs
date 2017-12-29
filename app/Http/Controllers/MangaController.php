@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Manga;
+use App\Chapter;
+use Illuminate\Support\Facades\DB;
 use Log;
 
 class MangaController extends Controller
@@ -16,7 +18,11 @@ class MangaController extends Controller
     public function index()
     {
         $mangas = Manga::all();
-        return response()->json($mangas);
+        return response()->json([
+            'code' => 200,
+            'message' => 'Success',
+            'data' => $mangas
+        ]);
     }
 
     /**
@@ -40,7 +46,7 @@ class MangaController extends Controller
     {
         try{
         Log::info('im in store');
-        $manga = new Manga();
+        $manga = new Manga;
         $manga->name = $request->get('name');
         $manga->slug = $request->get('slug');
         $manga->other_name = $request->get('other_name');
@@ -73,26 +79,16 @@ class MangaController extends Controller
         try{
             Log::info('im in show');
             $manga = Manga::find($id);
+
             if($manga){
-                if(request()->isJson()){
-                    return response()->json([
-                        'message'=>'Get manga successfully',
-                        'code'=> 200,
-                        'data' => $manga
-                    ]);
-                }
+                $chapters = Chapter::where('manga_id', $manga->id)->orderBy('chap', 'ASC')->get();
+                // $chapters = DB::table('mangas')->where('mangas.id', 5)->leftJoin('chapters', 'mangas.id', '=', 'chapters.manga_id')->select('mangas.*', 'chapters.name')->get();
                 return response()->json([
                         'message'=>'Get manga successfully',
                         'code'=> 200,
-                        'data' => $manga
+                        'data' => ['manga' => $manga, 'chapters' => $chapters]
                     ]);
             } else {
-                if(request()->isJson()){
-                    return response()->json([
-                        'message'=>'Manga is not found',
-                        'code'=>404
-                    ]);
-                }
                 return response()->json([
                     'message'=>'Manga is not found',
                     'code'=>404
@@ -100,6 +96,7 @@ class MangaController extends Controller
             }
 
         } catch (\Exception $e){
+            Log::info($e);
             if(request()->isJson()){
                 return response()->json([
                                             'message'=>'Something went wrong! Try later',
@@ -129,7 +126,33 @@ class MangaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Log::info('im in update manga');
+        try{
+            $manga = Manga::find($id);
+            if(!$manga) {
+                return response()->json([
+                                'message'=>'Manga not found',
+                                'code'=>404]
+                    );
+            }
+            $manga->name = $request->get('name');
+            $manga->slug = $request->get('slug');
+            $manga->other_name = $request->get('other_name');
+            $manga->status = $request->get('status');
+            $manga->description = $request->get('description');
+            $manga->cover = $request->get('cover');
+            $manga->save();
+            return response()->json([
+                                    'message'=>'Manga updated successfully',
+                                    'code'=>200
+                                ]);
+        } catch (\Exception $e){
+            Log::info($e);
+            return response()->json([
+                                        'message'=>'Something went wrong! Try later',
+                                        'code'=>500]
+                            );
+        }
     }
 
     /**
