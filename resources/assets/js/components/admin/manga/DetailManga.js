@@ -17,7 +17,7 @@ var ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation
 export default class DetailManga extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {idToDel: '', manga: true, name: '', slug: '', other_name: '', status: '', description: '', cover: ''};
+		this.state = {idToDel: '', manga: true, name: '', slug: '', other_name: '', status: '', description: '', cover: '', chapters: ''};
 
 		this.handleChangeName = this.handleChangeName.bind(this);
 		this.handleChangeSlug = this.handleChangeSlug.bind(this);
@@ -46,12 +46,13 @@ export default class DetailManga extends Component {
 				} else {
 					let data = response.data.data;
 					this.setState({
-						name: data.name,
-						slug: data.slug,
-						other_name: data.other_name,
-						status: data.status,
-						description: data.description,
-						cover: data.cover
+						name: data.manga.name,
+						slug: data.manga.slug,
+						other_name: data.manga.other_name || '',
+						status: data.manga.status,
+						description: data.manga.description || '',
+						cover: data.manga.cover,
+						chapters: data.chapters
 					});
 					document.title = 'Detail - '+data.name;
 				}
@@ -111,6 +112,25 @@ export default class DetailManga extends Component {
 
 	handleSubmit(e){
 		e.preventDefault();
+		console.log('update manga');
+		const manga = {
+			name: this.state.name,
+			slug: this.state.slug,
+			other_name: this.state.other_name,
+			status: this.state.status,
+			description: this.state.description,
+			cover: this.state.cover
+		}
+		let uri = '/mangas/';
+		axios.put(uri+this.props.match.params.id, manga).then((response) => {
+			console.log(response);
+			if(response.data.code === 200){
+				this.alertSuccess({title: 'Success', text: response.data.message});
+			} else {
+				this.alertError({title: 'Error', text: response.data.message});
+			}
+			// browserHistory.push('/display-item');
+		});
 	}
 
 	showModal(id){
@@ -134,6 +154,22 @@ export default class DetailManga extends Component {
 
 	render(){
 		if(this.state.manga){
+			let chapterList = '';
+			if(this.state.chapters instanceof Array){
+				chapterList = this.state.chapters.map((chapter, index) => {
+					return (
+							<tr key={index}>
+								<td>{chapter.chap}</td>
+								<td>{chapter.name}</td>
+								<td>{chapter.status}</td>
+								<td className="action">
+									<Link to="/" className="pR10"><i className="fa fa-eye"></i></Link>
+									<Link to={"/admin/edit-chapter/"+chapter.id}><i className="fa fa-pencil"></i></Link>
+								</td>
+							</tr>
+						);
+				});
+			}
 			return(
 					<div >
 						<Breadcrumb activePage="Detail manga" />
@@ -177,13 +213,12 @@ export default class DetailManga extends Component {
 										</div>
 									</div>
 									<div className="form-group row">
-										<label htmlFor="inputEmail3" className="col-sm-2 col-form-label">Status</label>
+										<label htmlFor="status" className="col-sm-2 col-form-label">Status</label>
 										<div className="col-sm-10">
-											<select className="form-control" id="status" onChange={this.handleChangeStatus} value={this.state.status}>
-												<option value="new">New</option>
-												<option value="cam">Cam</option>
-												<option value="raw">Raw</option>
-										</select>
+											<input type="text" className="form-control" id="status" placeholder="Hot, New" 
+												onChange={this.handleChangeStatus}
+												value={this.state.status}
+											/>
 										</div>
 									</div>
 									<div className="form-group row">
@@ -219,6 +254,7 @@ export default class DetailManga extends Component {
 											</tr>
 										</thead>
 										<tbody>
+											{chapterList}
 										</tbody>
 									</table>
 								</div>
@@ -251,21 +287,21 @@ export default class DetailManga extends Component {
 				);
 		} else {
 			return(
-				<div>
-					<Breadcrumb activePage="Detail manga" />
-					<div className="row">
-						<div className="col-sm-12">
-						<p style={{fontSize:40+'px'}} className="text-center">404</p>
+					<div>
+						<Breadcrumb activePage="Detail manga" />
+						<div className="row">
+							<div className="col-sm-12">
+							<p style={{fontSize:40+'px'}} className="text-center">404</p>
+							</div>
+							<div className="col-sm-12">
+							<p className="text-center" style={{fontSize:40+'px'}}>No data</p>
+							</div>
 						</div>
-						<div className="col-sm-12">
-						<p className="text-center" style={{fontSize:40+'px'}}>No data</p>
-						</div>
+						<ToastContainer ref={(input) => {this.container = input;}}
+		                        toastMessageFactory={ToastMessageFactory}
+		                        className="toast-top-right"
+		                        preventDuplicates={true} />
 					</div>
-					<ToastContainer ref={(input) => {this.container = input;}}
-	                        toastMessageFactory={ToastMessageFactory}
-	                        className="toast-top-right"
-	                        preventDuplicates={true} />
-				</div>
 				);
 		}
 	}
