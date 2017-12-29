@@ -27,7 +27,7 @@ export default class ListManga extends Component {
 		axios.get('/mangas')
 			.then(response => {
 				console.log(response);
-				this.setState({ mangas: response.data });
+				this.setState({ mangas: response.data.data });
 		})
 		.catch(function (error) {
 			console.log(error);
