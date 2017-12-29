@@ -40,6 +40,7 @@ export default class SideBar extends Component{
 	                        </a>
 	                        <ul className="collapse list-unstyled" id="chapterSubmenu">
 	                            <li><Link to="/admin/add-chapter">Add chapter</Link></li>
+	                            <li><Link to="/admin/add-multi-chapter">Add multiple chapter</Link></li>
 	                            <li><Link to="/admin/list-chapter">List chapter</Link></li>
 	                        </ul>
 	                    </li>
