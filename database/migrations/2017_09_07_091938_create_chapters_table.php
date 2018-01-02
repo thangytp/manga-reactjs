@@ -21,7 +21,7 @@ class CreateChaptersTable extends Migration
             $table->string('slug');
             $table->string('status')->nullable();
             $table->text('content');
-            $table->integer('views')->nullable();
+            $table->integer('views')->nullable()->default(0);
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
         });
