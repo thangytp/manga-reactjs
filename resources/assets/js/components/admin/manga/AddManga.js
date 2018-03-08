@@ -86,6 +86,15 @@ export default class AddManga extends Component {
 			description: this.state.description,
 			cover: this.state.cover
 		}
+		for(let key in manga){
+			if (manga.hasOwnProperty(key)) {
+				console.log(manga[key]);
+		        if(!manga[key]) {
+		        	this.alertError({title: 'Fail', text: key + ' cannot be empty'});
+		        	return;
+		        }
+		    }
+		}
 		let uri = '/mangas';
 		axios.post(uri, manga).then((response) => {
 			console.log(response);

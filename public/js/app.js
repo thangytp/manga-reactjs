@@ -78014,6 +78014,15 @@ var AddManga = function (_Component) {
 				description: this.state.description,
 				cover: this.state.cover
 			};
+			for (var key in manga) {
+				if (manga.hasOwnProperty(key)) {
+					console.log(manga[key]);
+					if (!manga[key]) {
+						this.alertError({ title: 'Fail', text: key + ' cannot be empty' });
+						return;
+					}
+				}
+			}
 			var uri = '/mangas';
 			axios.post(uri, manga).then(function (response) {
 				console.log(response);

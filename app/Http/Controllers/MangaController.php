@@ -59,6 +59,7 @@ class MangaController extends Controller
                                     'code'=>200
                                 ]);
         } catch (\Exception $e){
+            Log::info($e->getMessage());
             if(request()->isJson()){
                 return response()->json([
                                             'message'=>'Something went wrong! Try later',
