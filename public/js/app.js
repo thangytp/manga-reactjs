@@ -78017,7 +78017,7 @@ var AddManga = function (_Component) {
 			for (var key in manga) {
 				if (manga.hasOwnProperty(key)) {
 					console.log(manga[key]);
-					if (!manga[key]) {
+					if (key != 'other_name' && !manga[key]) {
 						this.alertError({ title: 'Fail', text: key + ' cannot be empty' });
 						return;
 					}
