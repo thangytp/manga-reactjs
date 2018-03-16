@@ -32,7 +32,7 @@ class MangaController extends Controller
      */
     public function create()
     {
-        Log::info('im in create');
+        Log::info('im in create view');
         return response('Create');
     }
 
@@ -45,7 +45,10 @@ class MangaController extends Controller
     public function store(Request $request)
     {
         try{
-        Log::info('im in store');
+        Log::info('im in store - save to db');
+        $manga = Manga::where('name', $request->get('name'))->first();
+        Log::info($manga);
+        die();
         $manga = new Manga;
         $manga->name = $request->get('name');
         $manga->slug = $request->get('slug');
