@@ -264,7 +264,7 @@ export default class AddChapter extends Component {
 								<div className="form-group row">
 									<label htmlFor="chap" className="col-sm-2 col-form-label">Chap</label>
 									<div className="col-sm-10">
-										<input type="text" className="form-control" id="chap" placeholder="" value={this.state.chap} onChange={this.handleChangeChap} required/>
+										<input type="text" className="form-control" id="chap" placeholder="" value={this.state.chap} onChange={this.handleChangeChap}/>
 									</div>
 								</div>
 								<div className="form-group row">
